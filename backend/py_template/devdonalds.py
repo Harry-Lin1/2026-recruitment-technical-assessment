@@ -21,7 +21,6 @@ class Recipe(CookbookEntry):
 class Ingredient(CookbookEntry):
 	cook_time: int
 
-
 # =============================================================================
 # ==== HTTP Endpoint Stubs ====================================================
 # =============================================================================
@@ -42,7 +41,7 @@ def parse():
 
 # [TASK 1] ====================================================================
 # Takes in a recipeName and returns it in a form that 
-def parse_handwriting(recipeName: str) -> Union[str | None]:
+def parse_handwriting(recipeName: str) 
 
     name = recipeName.replace('-', ' ')
     name = name.replace('_', ' ')
@@ -91,10 +90,8 @@ def create_entry():
                 return "Duplicate required items", 400
             seen_names.add(item['name'])
 
-    # Success
     cookbook.append(data)
     return "", 200
-
 
 # [TASK 3] ====================================================================
 # Endpoint that returns a summary of a recipe that corresponds to a query name
@@ -109,19 +106,15 @@ def summary():
             root_recipe = entry
             break
 
-
     if root_recipe is None:
         return "Recipe not found", 400
-
 
     if root_recipe.get('type') != 'recipe':
         return "Target item is an ingredient, not a recipe", 400
 
-
     # recursive section
     ingredient_counts = {}
     total_cook_time = 0
-
 
     def find_ingredients_recursive(item_name, multiplier):
         nonlocal total_cook_time
@@ -136,7 +129,6 @@ def summary():
         if item_details is None:
             raise ValueError("Missing component")
 
-
         # case 1: base ingredient 
         if item_details['type'] == 'ingredient':
             # Add 
@@ -150,7 +142,6 @@ def summary():
                 new_multiplier = multiplier * sub_item['quantity']
                 find_ingredients_recursive(sub_item['name'], new_multiplier)
 
-
     # search inside root recipe
     try:
         for item in root_recipe.get('requiredItems', []):
@@ -158,12 +149,10 @@ def summary():
     except ValueError:
         return "Recipe contains items not in cookbook", 400
 
-
     final_ingredients_list = [
         {"name": name, "quantity": qty}
         for name, qty in ingredient_counts.items()
     ]
-
 
     return jsonify({
         "name": target_name,
